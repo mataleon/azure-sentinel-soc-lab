@@ -81,12 +81,15 @@ Despite 200,000+ sustained brute force attempts across 48 hours from multiple co
 
 ## Detection Rules
 
-| Rule | Severity | MITRE Tactic | Technique |
-|------|----------|--------------|-----------|
-| Brute Force Attack Detected | 🔴 High | Initial Access | T1110 |
-| Successful Login After Brute Force | 🔴 High | Credential Access | T1110.001 |
-| Suspicious User Account Created | 🟡 Medium | Persistence | T1136 |
-| User Added to Admin Group | 🔴 High | Privilege Escalation | T1078 |
+| Rule | Severity | Source | MITRE | Technique |
+|------|----------|--------|-------|-----------|
+| Brute Force Attack Detected | High | Custom | Initial Access | T1110 |
+| Successful Login After Brute Force | High | Custom | Credential Access | T1110.001 |
+| Suspicious User Account Created | Medium | Custom | Persistence | T1136 |
+| User Added to Admin Group | High | Custom | Privilege Escalation | T1078 |
+| Brute Force Against Azure Portal | High | Microsoft Entra | Credential Access | T1110 |
+| Anomalous Sign-in Location | Medium | Microsoft Entra | Initial Access | T1078 |
+| Account Created and Deleted | High | Microsoft Entra | Initial Access | T1078.004 |
 
 ---
 
