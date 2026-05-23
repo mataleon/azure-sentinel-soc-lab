@@ -1,0 +1,54 @@
+// ===== BRUTE FORCE DETECTION =====
+SecurityEvent
+| where EventID == 4625
+| where TimeGenerated > ago(5m)
+| summarize FailCount = count() by IpAddress, bin(TimeGenerated, 5m)
+| where FailCount >= 10
+| project IpAddress, FailCount, TimeGenerated
+
+// ===== GEO ATTACK MAP =====
+let GeoIPDB = _GetWatchlist('geoip')
+| project network, Country = country_name,
+  Latitude = toreal(latitude),
+  Longitude = toreal(longitude);
+SecurityEvent
+| where EventID == 4625
+| where TimeGenerated > ago(7d)
+| where IpAddress != "-"
+| summarize FailedAttempts = count() by IpAddress
+| extend ip_long = parse_ipv4(IpAddress)
+| extend first_octet = tostring(toint(ip_long / 16777216))
+| extend network_range = strcat(first_octet, ".0.0.0/8")
+| join kind=leftouter GeoIPDB on $left.network_range == $right.network
+| project IpAddress, FailedAttempts, Country, Latitude, Longitude
+| where isnotempty(Country)
+| sort by FailedAttempts desc
+
+// ===== TOP ATTACKING IPS =====
+SecurityEvent
+| where EventID == 4625
+| where TimeGenerated > ago(24h)
+| summarize FailedAttempts = count() by IpAddress
+| sort by FailedAttempts desc
+| take 20
+
+// ===== SUCCESS AFTER FAILURE =====
+let FailedLogins = SecurityEvent
+| where EventID == 4625
+| where TimeGenerated > ago(1h)
+| summarize FailCount = count() by IpAddress, TargetAccount;
+SecurityEvent
+| where EventID == 4624
+| where TimeGenerated > ago(1h)
+| join kind=inner FailedLogins on IpAddress
+| where FailCount >= 5
+| project TimeGenerated, IpAddress, TargetAccount, FailCount
+| sort by FailCount desc
+
+// ===== ATTACK TIMELINE =====
+SecurityEvent
+| where EventID == 4625
+| where TimeGenerated > ago(24h)
+| summarize Attacks = count() by bin(TimeGenerated, 1h)
+| order by TimeGenerated asc
+| render timechart
