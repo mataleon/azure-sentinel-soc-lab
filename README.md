@@ -91,7 +91,25 @@ Despite 200,000+ sustained brute force attempts across 48 hours from multiple co
 | Anomalous Sign-in Location | Medium | Microsoft Entra | Initial Access | T1078 |
 | Account Created and Deleted | High | Microsoft Entra | Initial Access | T1078.004 |
 
----
+## Active Directory Lab Addition
+
+### Environment
+- Windows Server 2022 Domain Controller (DC-01)
+- Windows 11 Client joined to domain (Client-01)
+- Domain: soclab.local
+- 10 domain user accounts
+
+### Attacks Simulated
+| Attack | MITRE | Tool |
+|--------|-------|------|
+| Brute Force | T1110 | net use |
+| Kerberoasting | T1558.003 | setspn |
+| Credential Dumping | T1003 | Mimikatz |
+| DCSync/Golden Ticket | T1003.006 | Mimikatz |
+| Backdoor Account | T1136 | net user |
+| Scheduled Task | T1053 | schtasks |
+| Lateral Movement | T1021 | SMB |
+| Password Spray | T1110.003 | PowerShell |
 
 ## KQL Queries
 All detection and hunting queries available in [/kql-queries](kql-queries/)
