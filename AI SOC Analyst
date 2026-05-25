@@ -1,0 +1,193 @@
+AI SOC Analyst 🛡️
+Automated security incident analysis powered by Claude AI + Microsoft Sentinel
+
+An AI-powered SOC analyst that connects to Microsoft Sentinel, automatically investigates security incidents, maps attacks to MITRE ATT&CK, and generates professional incident reports — just like a Tier 1 SOC analyst, running 24/7.
+
+
+What It Does
+Connects to Microsoft Sentinel via API and pulls live incidents
+Investigates each alert using Claude AI with 10 years of SOC analyst context
+Classifies threats: True Positive / False Positive / Benign Positive
+Maps attacks to MITRE ATT&CK techniques automatically
+Generates professional Markdown and HTML incident reports
+Interactive mode for follow-up questions about any incident
+
+
+Demo
+============================================================
+
+      AI SOC ANALYST — Powered by Claude + Sentinel
+
+============================================================
+
+Connecting to Microsoft Sentinel...
+
+Connected.
+
+Fetching last 5 incident(s)...
+
+Found 5 incident(s):
+
+  [1] Brute Force Attack - Multiple Failed Logins
+
+       Severity: High | Status: New | Created: 2026-05-24 22:43
+
+  [2] Suspicious PowerShell Execution
+
+       Severity: Medium | Status: Active | Created: 2026-05-24 21:17
+
+  [3] Impossible Travel Detected
+
+       Severity: Medium | Status: New | Created: 2026-05-24 20:05
+
+────────────────────────────────────────────────────────────
+
+  Analyzing: Brute Force Attack - Multiple Failed Logins
+
+  Severity:  High
+
+────────────────────────────────────────────────────────────
+
+  [1/3] Fetching associated alerts...
+
+         Found 3 alert(s)
+
+  [2/3] Running AI analysis...
+
+         Analysis complete ✓
+
+  [3/3] Saving reports...
+
+         Markdown : reports/incident_report_20260524_224318.md
+
+         HTML     : reports/incident_report_20260524_224318.html
+
+
+Sample AI Analysis Output
+## INCIDENT SUMMARY
+
+A brute force attack was detected targeting the domain controller,
+
+with 847 failed authentication attempts from IP 185.220.101.45
+
+over a 12-minute window, suggesting automated credential stuffing.
+
+## THREAT ASSESSMENT
+
+- Severity Justification: High — targeting DC with volume suggesting automation
+
+- Threat Actor Profile: Opportunistic threat actor using credential stuffing tools
+
+- Attack Stage: Initial Access (MITRE ATT&CK TA0001)
+
+## MITRE ATT&CK MAPPING
+
+- T1110.003 — Brute Force: Password Spraying
+
+- T1078 — Valid Accounts (attempted)
+
+## VERDICT
+
+Classification: True Positive
+
+Confidence: High
+
+Priority: Critical
+
+
+Tech Stack
+Component
+Technology
+AI Analysis
+Anthropic Claude API
+SIEM
+Microsoft Sentinel
+Auth
+Azure AD App Registration
+Language
+Python 3.10+
+Reports
+Markdown + HTML
+
+
+
+Project Structure
+ai-soc-analyst/
+
+├── main.py              # Entry point — orchestrates full pipeline
+
+├── sentinel_client.py   # Microsoft Sentinel API integration
+
+├── ai_analyst.py        # Claude AI analysis engine
+
+├── report_generator.py  # Markdown + HTML report generation
+
+├── .env.example         # Environment variable template
+
+└── reports/             # Generated incident reports (auto-created)
+
+
+Setup
+1. Clone the repo
+git clone https://github.com/yourusername/ai-soc-analyst
+
+cd ai-soc-analyst
+2. Install dependencies
+pip install anthropic requests python-dotenv
+3. Configure Azure App Registration
+In Azure Portal:
+
+Go to App Registrations → New Registration
+Under Certificates & Secrets → create a Client Secret (copy the Value)
+Assign the app the Microsoft Sentinel Reader role on your workspace
+4. Set environment variables
+cp .env.example .env
+
+# Fill in your credentials in .env
+5. Run
+# Analyse last 5 incidents
+
+python main.py --limit 5
+
+# Interactive mode — ask follow-up questions after each incident
+
+python main.py --limit 3 --interactive
+
+
+Environment Variables
+Variable
+Description
+ANTHROPIC_API_KEY
+Your Anthropic API key
+AZURE_TENANT_ID
+Azure AD Tenant ID
+AZURE_CLIENT_ID
+App Registration Client ID
+AZURE_CLIENT_SECRET
+App Registration Client Secret (Value)
+AZURE_SUBSCRIPTION_ID
+Azure Subscription ID
+SENTINEL_WORKSPACE
+Log Analytics Workspace name
+SENTINEL_RESOURCE_GROUP
+Resource group containing the workspace
+
+
+
+The Story Behind This
+This project is part of a hands-on cybersecurity portfolio built from scratch:
+
+Deployed a honeypot — collected 200,000+ real attack events
+Built an Active Directory lab — simulated enterprise environment
+Configured Microsoft Sentinel — detection rules for APT techniques
+Built this AI SOC Analyst — automated the entire Tier 1 investigation workflow
+
+
+Roadmap
+AI incident analysis
+MITRE ATT&CK mapping
+HTML + Markdown reports
+Email / Teams notifications
+LLM Prompt Injection Defender
+AI Phishing Email Detector
+AI Malware Analysis Sandbox
